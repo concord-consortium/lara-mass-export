@@ -1,0 +1,19 @@
+{
+  "name": "lara-mass-export",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/concord-consortium/lara-mass-export.git"
+  },
+  "author": "Doug Martin",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/concord-consortium/lara-mass-export/issues"
+  },
+  "homepage": "https://github.com/concord-consortium/lara-mass-export#readme"
+}
