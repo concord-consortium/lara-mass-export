@@ -16,5 +16,11 @@
   "bugs": {
     "url": "https://github.com/concord-consortium/lara-mass-export/issues"
   },
-  "homepage": "https://github.com/concord-consortium/lara-mass-export#readme"
+  "homepage": "https://github.com/concord-consortium/lara-mass-export#readme",
+  "dependencies": {
+    "dotenv": "^16.0.1",
+    "mysql2": "^2.3.3",
+    "papaparse": "^5.3.2",
+    "request": "^2.88.2"
+  }
 }
