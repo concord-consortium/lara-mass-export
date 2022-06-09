@@ -14,6 +14,7 @@ ssh -L 127.0.0.1:3800:lara-staging-vpc.cheea3ib6y8u.us-east-1.rds.amazonaws.com:
 
 and then create a .env file (optionaly starting with the included `.env.sample` file) with the following contents:
 
+```
 LARA_URL=      ; example: https://authoring.concord.org/
 LARA_SESSION=  ; the `_lightweight-standalone_session` cookie value (see below)
 DB_HOSTNAME=   ; example: localhost if using port forwarding or lara-vpc.cheea3ib6y8u.us-east-1.rds.amazonaws.com if direct connect
@@ -21,6 +22,7 @@ DB_USERNAME=   ; example: master
 DB_PASSWORD=   ; example: nice-try-haxxors
 DB_PORT=       ; example: 3800 if using the port forwarding line above or 3306 if directly connecting
 WAIT_BETWEEN_REQUESTS= ; example: 1000 to wait 1 second between export requests
+```
 
 The `_lightweight-standalone_session` cookie value can be copied from Chrome Developer Tools in the Application tab under the Cookies storage menu entry after you login as an admin to the LARA_URL specified in the .env file.  Make sure you check the "Show url decoded" checkbox before copying the value.  This cookie is needed as export is behind a permisssion check.
 
