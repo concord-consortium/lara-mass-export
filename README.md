@@ -34,4 +34,10 @@ The first step is invoked via: `npm run generate-csvs` which will generate a csv
 
 The second step is invoked with `npm run export-json` which will export all the activies and sequences found in the csv files.  The json files will be placed in the same subfolder as the previous step.
 
-Once exported the json files can be uploaded to S3 via the `aws` CLI.  An upload step has not been added to the script as the CLI handles this well.
+Once exported the json files can be uploaded to S3 via the `aws` CLI.  An upload step has not been added to the script as the CLI handles this well.  To use the aws CLI first copy over your credentials and then run:
+
+`aws s3 cp data/DATE s3://cc-project-resources/lara-exports/production/DATE --recursive`
+
+where DATE is a date string in the form of DD-MMM-YYYY created by the export script.
+
+**NOTE**: you can add `--dryrun` to the aws cli command to see what it will upload without actually uploading the files.
