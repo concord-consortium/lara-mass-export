@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "generate-csvs": "node ./index.js generate-csvs",
+    "generate-commands": "node ./index.js generate-commands",
     "export-json": "node ./index.js export-json"
   },
   "repository": {

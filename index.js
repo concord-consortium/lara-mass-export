@@ -115,31 +115,49 @@ const awaitTimer = (ms) => {
   })
 }
 
-const exportJSON = () => {
+const generateCommands = (length) => {
+  const path = getPath();
+
+  (async _ => {
+    const commands = []
+    for (const type of ["activities", "sequences"]) {
+      const typePath = `${path}/${type}`;
+      rows = await parseCSV(`${path}/${type}.csv`);
+
+      let start = 0
+      while (start < rows.length) {
+        const end = Math.min(rows.length, start + length - 1)
+        commands.push(`(npm run export-json ${type} ${start} ${length} > ${path}/${type}-${start}-${end}.log 2> ${path}/${type}-${start}-${end}-error.log &)`)
+        start += length
+      }
+    }
+    console.log(commands.join(" && "))
+  })();
+}
+
+const exportJSON = (type, start, length) => {
   const env = getEnv();
   const path = getPath();
 
   (async _ => {
-    for (const type of ["activities", "sequences"]) {
-      const typePath = `${path}/${type}`;
-      mkdir(typePath);
+    const typePath = `${path}/${type}`;
+    mkdir(typePath);
 
-      rows = await parseCSV(`${path}/${type}.csv`);
-      const numRows = rows.length;
-      let rowNum = 1;
-      for (let row of rows) {
-        try {
-          const startTime = Date.now();
-          const nextTime = startTime + env.waitBetweenRequests;
-          const json = await getJSON(env, type, row, rowNum, numRows);
-          const waitTime = Math.max(0, nextTime - Date.now())
-          const filename = `${typePath}/${row.id}.json`
-          fs.writeFileSync(filename, json);
-          await awaitTimer(waitTime)
-          rowNum++
-        } catch (e) {
-          console.log(e.toString())
-        }
+    let rows = (await parseCSV(`${path}/${type}.csv`)).splice(start, length)
+    const numRows = start + rows.length;
+    let rowNum = start;
+    for (let row of rows) {
+      try {
+        const startTime = Date.now();
+        const nextTime = startTime + env.waitBetweenRequests;
+        const json = await getJSON(env, type, row, rowNum, numRows);
+        const waitTime = Math.max(0, nextTime - Date.now())
+        const filename = `${typePath}/${row.id}.json`
+        fs.writeFileSync(filename, json);
+        await awaitTimer(waitTime)
+        rowNum++
+      } catch (e) {
+        console.log(e.toString())
       }
     }
   })();
@@ -150,8 +168,23 @@ switch (step) {
     generateCSVs();
     break;
 
+  case "generate-commands":
+    if (process.argv.length !== 4) {
+      die("Usage: npm run generate-commands <length>")
+    }
+    generateCommands(parseInt(process.argv[3], 10));
+    break;
+
   case "export-json":
-    exportJSON();
+    const args = process.argv
+    if (args.length !== 6) {
+      die("Usage: npm run export-json <type> <start> <length>")
+    }
+    const type = args[3]
+    const start = parseInt(args[4], 10)
+    const length = parseInt(args[5], 10)
+    console.log("Exporting JSON for", type, start, length)
+    exportJSON(type, start, length);
     break;
 
   case undefined:
